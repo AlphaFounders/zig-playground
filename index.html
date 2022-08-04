@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script type="module">
+      const importObject = {
+        module: {},
+        env: {
+          memory: new WebAssembly.Memory({ initial: 256 }),
+          print: (result) => {
+            console.log(`The result is ${result}`);
+          },
+        },
+      };
+      fetch("./math.wasm")
+        .then((response) => response.arrayBuffer())
+        .then((bytes) => WebAssembly.instantiate(bytes, importObject))
+        .then((result) => {
+          const add = result.instance.exports.add;
+          add(1, 2);
+        });
+    </script>
+  </head>
+  <body></body>
+</html>
